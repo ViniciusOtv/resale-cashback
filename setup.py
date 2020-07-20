@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 
-# Third
 from setuptools import find_packages, setup
 
 __version__ = '0.1.0'
@@ -9,16 +7,19 @@ __long_description__ = 'Api Python Para cadastrar um novo revendedor(a) e retorn
 
 __author__ = 'Vinicius Otavio'
 __author_email__ = 'vinicius.otv@hotmail.com'
+testing_extras = [
+    'pytest',
+    'pytest-cov',
+]
 
 setup(
-    name='api',
-    version=__version__,
+    name='resale api',
     author=__author__,
     author_email=__author_email__,
     packages=find_packages(),
     description=__description__,
     long_description=__long_description__,
-    url='https://github.com/lucassimon/flask-api-users.git',
+    url='',
     keywords='API, MongoDB',
     include_package_data=True,
     zip_safe=False,
@@ -35,4 +36,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: MIT License',
     ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
+    extras_require={
+        'testing': testing_extras},
 )
