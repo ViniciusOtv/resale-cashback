@@ -19,11 +19,14 @@ def check_password_in_signup(password: str, confirm_password: str):
     if not confirm_password:
         return False
 
+    return True
+
+def check_password_is_same(password: str, confirm_password: str):
+
     if not password == confirm_password:
         return False
 
-    return True
-
+    return True    
 
 def get_user_by_id(user_id: str):
     try:

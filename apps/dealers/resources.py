@@ -12,13 +12,13 @@ from apps.responses import (
     resp_data_invalid,
     resp_ok
 )
-from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA
+from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME
 from apps.messages import MSG_RESOURCE_CREATED
 
 # Local
 from .models import User
 from .schemas import UserRegistrationSchema, UserSchema
-from .utils import check_password_in_signup
+from .utils import check_password_in_signup, check_password_is_same
 
 
 class SignUp(Resource):
@@ -40,6 +40,10 @@ class SignUp(Resource):
         # Se as senhas não são iguais retorno uma respota inválida
         if not check_password_in_signup(password, confirm_password):
             errors = {'password': MSG_PASSWORD_WRONG}
+            return resp_data_invalid('Users', errors)
+        
+        if not check_password_is_same(password, confirm_password):
+            errors = {'password': MSG_PASSWORD_NOT_SAME}
             return resp_data_invalid('Users', errors)
 
         # Desserialização os dados postados ou melhor meu payload
