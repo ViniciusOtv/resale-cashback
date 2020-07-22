@@ -10,7 +10,7 @@ from mongoengine import (
     EmbeddedDocument,
     EmbeddedDocumentField,
     StringField,
-    URLField
+    URLField, 
 )
 
 # Apps
