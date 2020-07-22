@@ -12,13 +12,13 @@ from apps.responses import (
     resp_data_invalid,
     resp_ok
 )
-from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME
+from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME, MSG_DOCUMENT_NULL
 from apps.messages import MSG_RESOURCE_CREATED
 
 # Local
 from .models import User
 from .schemas import UserRegistrationSchema, UserSchema
-from .utils import check_password_in_signup, check_password_is_same
+from .utils import check_password_in_signup, check_password_is_same, check_document
 
 
 class SignUp(Resource):
@@ -35,6 +35,11 @@ class SignUp(Resource):
 
         password = req_data.get('password', None)
         confirm_password = req_data.pop('confirm_password', None)
+        document = req_data.get('cpf', None)
+
+        if not check_document(document):
+            errors = {'cpf': MSG_DOCUMENT_NULL}
+            return resp_data_invalid('Users', errors)
 
         # verifico através de uma função a senha e a confirmação da senha
         # Se as senhas não são iguais retorno uma respota inválida
@@ -46,12 +51,11 @@ class SignUp(Resource):
             errors = {'password': MSG_PASSWORD_NOT_SAME}
             return resp_data_invalid('Users', errors)
 
-        
-
         dict_data = {
             "full_name": req_data.get('full_name', None),
             "email": req_data.get('email', None),
-            "password": req_data.get('password', None)
+            "password": req_data.get('password', None),
+            "cpf": req_data.get('cpf', None)
         }
 
         data = json.dumps(dict_data)

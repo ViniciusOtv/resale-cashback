@@ -26,7 +26,14 @@ def check_password_is_same(password: str, confirm_password: str):
     if not password == confirm_password:
         return False
 
-    return True    
+    return True 
+
+def check_document(document: str):
+
+    if not document: 
+        return False
+        
+    return True           
 
 def get_user_by_id(user_id: str):
     try:

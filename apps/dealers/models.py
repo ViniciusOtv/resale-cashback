@@ -24,7 +24,7 @@ class Roles(EmbeddedDocument):
     admin = BooleanField(default=False)
     
     
-class UserMixin(db.Document):
+class DealerMixin(db.Document):
     """
     Default implementation for User fields
     """
@@ -35,6 +35,7 @@ class UserMixin(db.Document):
 
     email = EmailField(required=True, unique=True)
     password = StringField(required=True)
+    cpf = StringField(required=True)
     roles = EmbeddedDocumentField(Roles, default=Roles)
     created = DateTimeField(default=datetime.now)
     # status = StringField(default=False)
@@ -44,30 +45,12 @@ class UserMixin(db.Document):
 
     def is_admin(self):
         return self.roles.admin
-
-class Address(EmbeddedDocument):
-    """
-    Default implementation for address fields
-    """
-    meta = {
-        'ordering': ['zip_code']
-    }
-    zip_code = StringField(default='')
-    address = StringField(default='')
-    number = StringField(default='')
-    complement = StringField(default='')
-    neighborhood = StringField(default='')
-    city = StringField(default='')
-    city_id = StringField(default='')
-    state = StringField(default='')
-    country = StringField(default='BRA')        
-
-class User(UserMixin):
+       
+class User(DealerMixin):
     '''
     Users
     '''
     meta = {'collection': 'users'}
 
     full_name = StringField(required=True)
-    cpf_cnpj = StringField(default='')
-    address = EmbeddedDocumentField(Address, default=Address)
+    cpf = StringField(required=True)
