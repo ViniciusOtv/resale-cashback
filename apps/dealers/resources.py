@@ -1,5 +1,5 @@
 from flask import request
-
+import json
 # Third
 from flask_restful import Resource
 from bcrypt import gensalt, hashpw
@@ -25,7 +25,7 @@ class SignUp(Resource):
     def post(self, *args, **kwargs):
         # Inicializo todas as variaveis utilizadas
         req_data = request.get_json() or None
-        data, errors, result = None, None, None
+        dict_data, errors, result = None, None, None
         password, confirm_password = None, None
         schema = UserRegistrationSchema()
 
@@ -41,13 +41,20 @@ class SignUp(Resource):
         if not check_password_in_signup(password, confirm_password):
             errors = {'password': MSG_PASSWORD_WRONG}
             return resp_data_invalid('Users', errors)
-        
+
         if not check_password_is_same(password, confirm_password):
             errors = {'password': MSG_PASSWORD_NOT_SAME}
             return resp_data_invalid('Users', errors)
 
-        # Desserialização os dados postados ou melhor meu payload
-        data, errors = schema.load(req_data)
+        
+
+        dict_data = {
+            "full_name": req_data.get('full_name', None),
+            "email": req_data.get('email', None),
+            "password": req_data.get('password', None)
+        }
+
+        data = json.dumps(dict_data)
 
         # Se houver erros retorno uma resposta inválida
         if errors:
@@ -60,13 +67,10 @@ class SignUp(Resource):
         # Qualquer exceção ao salvar o modelo retorno uma resposta em JSON
         # ao invés de levantar uma exception no servidor
         try:
-            data['password'] = hashed
-            data['email'] = data['email'].lower()
-            model = User(**data)
+            dict_data['password'] = hashed
+            dict_data['email'] = dict_data['email'].lower()
+            model = User(**dict_data)
             model.save()
-
-        except NotUniqueError:
-            return resp_already_exists('Users', 'fornecedor')
 
         except ValidationError as e:
             return resp_exception('Users', msg=MSG_INVALID_DATA, description=e)
@@ -80,5 +84,5 @@ class SignUp(Resource):
 
         # Retorno 200 o meu endpoint
         return resp_ok(
-            'Users', MSG_RESOURCE_CREATED.format('Usuário'),  data=result.data,
+            'Users', MSG_RESOURCE_CREATED.format('Usuário'), data=result,
         )

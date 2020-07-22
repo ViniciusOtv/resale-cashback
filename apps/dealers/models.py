@@ -22,8 +22,8 @@ class Roles(EmbeddedDocument):
     Roles permissions
     """
     admin = BooleanField(default=False)
-
-
+    
+    
 class UserMixin(db.Document):
     """
     Default implementation for User fields
@@ -37,7 +37,7 @@ class UserMixin(db.Document):
     password = StringField(required=True)
     roles = EmbeddedDocumentField(Roles, default=Roles)
     created = DateTimeField(default=datetime.now)
-    active = BooleanField(default=False)
+    # status = StringField(default=False)
 
     def is_active(self):
         return self.active

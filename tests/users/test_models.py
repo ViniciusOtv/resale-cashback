@@ -76,7 +76,7 @@ class TestUser:
             'full_name', 'id', 'password', 'roles'
         ]
 
-        model_keys = [i for i in self.model._fields.keys()]
+        model_keys = [i for i in self.model._fields.items()]
 
         fields.sort()
         model_keys.sort()
