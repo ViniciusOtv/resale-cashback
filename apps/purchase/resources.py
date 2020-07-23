@@ -1,5 +1,6 @@
 from flask import request
 import json
+import decimal
 # Third
 from flask_restful import Resource
 from bcrypt import gensalt, hashpw
@@ -11,12 +12,12 @@ from apps.responses import (
     resp_data_invalid,
     resp_ok
 )
-from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME, MSG_DOCUMENT_NULL
+from apps.messages import MSG_NO_DATA, MSG_INVALID_DATA, MSG_DOCUMENT_NULL
 from apps.messages import MSG_RESOURCE_CREATED
 
 from .models import PurchaseModel
 from .schemas import PurchaseSchema
-from .utils import check_approved_dealer, generate_guid
+from .utils import check_approved_dealer, generateUUID
 
 
 class Purchase(Resource):
@@ -30,12 +31,10 @@ class Purchase(Resource):
             return resp_data_invalid('Purchase', [], msg=MSG_NO_DATA)
 
         document = req_data.get('document_dealer', None)
+        status = req_data.get('purchase_status', None)
 
-        purchase_status = req_data.get('purchase_status', None)
-        purchase_status = check_approved_dealer(document)
-
-        if not purchase_status:
-            purchase_status == 'Em Validação'
+        if not document:
+             status = check_approved_dealer(document)
 
         dict_purchase_data = {
             "purchase_id": req_data.get('purchase_id', None),
@@ -47,23 +46,20 @@ class Purchase(Resource):
         # if dict_purchase_data:
         #     return resp_data_invalid('Purchase', dict_purchase_data)
 
-        # try:
-        dict_purchase_data['purchase_id'] = generate_guid()
-        dict_purchase_data['purchase_status'] = check_approved_dealer(document)
-        model = PurchaseModel(**dict_purchase_data)
-        model.save()
+        try:
+            dict_purchase_data["purchase_id"] = generateUUID(dict_purchase_data["purchase_id"])
+            dict_purchase_data['purchase_status'] = "Merda"
+            model = PurchaseModel(**dict_purchase_data)
+            model.save()
 
-        if dict_purchase_data['purchase_id']:
-            return resp_data_invalid('Purchase', dict_purchase_data['purchase_id'])
-
-        # except ValidationError as e:
-        #     return resp_exception('Purchase', msg=MSG_INVALID_DATA, description=e)
+        except ValidationError as e:
+            return resp_exception('Purchase', msg=MSG_INVALID_DATA, description=e)
 
         # except Exception as e:
         #     return resp_exception('Purchase', description=e)
 
         schema = PurchaseSchema()
-        result = schema.dump(model)
+        result = schema.loads(model, parse_float=decimal.Decimal, use_decimal=True)
 
         return resp_ok(
             'Purchase', MSG_RESOURCE_CREATED.format('Purchase'), data=result,

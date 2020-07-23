@@ -1,7 +1,7 @@
 from os import getenv
 from os.path import dirname, isfile, join
 
-import uuid
+from uuid import uuid4
 
 from mongoengine.errors import FieldDoesNotExist, DoesNotExist, MultipleObjectsReturned
 
@@ -17,15 +17,20 @@ _ENV_FILE = join(dirname(__file__), '.env')
 if isfile(_ENV_FILE):
     load_dotenv(dotenv_path=_ENV_FILE)
 
-def generate_guid():
+def generateUUID(_id):
     
-    purchase_id == uuid.uuid4()
-    return purchase_id
+    if not _id:
+        return str(uuid4())
 
 def check_approved_dealer(document):
-    status = ''
-    if not document == getenv('APPROVED_DEALER'): 
-        return status == 'Aprovado'
-      
-    return status == 'Em Validação'    
+
+    status = " "
+
+    if document == getenv('APPROVED_DEALER'): 
+
+        status = "Aprovado"
+        return status 
+
+    status = "Em Validação"
+    return status     
 
