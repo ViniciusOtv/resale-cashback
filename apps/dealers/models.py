@@ -50,7 +50,7 @@ class User(DealerMixin):
     '''
     Users
     '''
-    meta = {'collection': 'users'}
+    meta = {'collection': 'users', 'strict': False}
 
     full_name = StringField(required=True)
     cpf = StringField(required=True)
