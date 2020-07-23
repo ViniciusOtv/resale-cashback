@@ -24,7 +24,7 @@ def generateUUID(_id):
 
 def check_approved_dealer(document):
 
-    status = " "
+    status = ""
 
     if document == getenv('APPROVED_DEALER'): 
 

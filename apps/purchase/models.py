@@ -26,7 +26,7 @@ class PurchaseModel(db.Document):
     meta = {'collection': 'purchase'}
 
     purchase_id = StringField()
-    purchase_status = StringField(default="Em validação")
+    purchase_status = StringField()
     created = DateTimeField(default=datetime.now)
     purchase_values = DecimalField(default=0)
     document_dealer = StringField(required=True,  unique=False)

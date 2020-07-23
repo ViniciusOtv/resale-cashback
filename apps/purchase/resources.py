@@ -33,12 +33,7 @@ class Purchase(Resource):
         document = req_data.get('document_dealer', None)
         status = req_data.get('purchase_status', None)
 
-        if not document:
-             status = check_approved_dealer(document)
-
         dict_purchase_data = {
-            "purchase_id": req_data.get('purchase_id', None),
-            "purchase_status": req_data.get('purchase_status', None),
             "purchase_values": req_data.get('purchase_values', None),
             "document_dealer": req_data.get('document_dealer', None)
         }
@@ -47,8 +42,8 @@ class Purchase(Resource):
         #     return resp_data_invalid('Purchase', dict_purchase_data)
 
         try:
-            dict_purchase_data["purchase_id"] = generateUUID(dict_purchase_data["purchase_id"])
-            dict_purchase_data['purchase_status'] = "Merda"
+            dict_purchase_data["purchase_id"] = generateUUID(None)
+            dict_purchase_data['purchase_status'] = check_approved_dealer(document)
             model = PurchaseModel(**dict_purchase_data)
             model.save()
 
@@ -59,7 +54,7 @@ class Purchase(Resource):
         #     return resp_exception('Purchase', description=e)
 
         schema = PurchaseSchema()
-        result = schema.loads(model, parse_float=decimal.Decimal, use_decimal=True)
+        result = schema.dump(model)
 
         return resp_ok(
             'Purchase', MSG_RESOURCE_CREATED.format('Purchase'), data=result,
