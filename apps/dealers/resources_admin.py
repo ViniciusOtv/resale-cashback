@@ -53,7 +53,14 @@ class AdminUserResource(Resource):
     def get(self, user_id):
         result = None
         schema = UserSchema()
+        current_user = get_user_by_email(get_jwt_identity())
         
+        if not isinstance(current_user, User):
+            return current_user
+
+        if not (current_user.is_active()) and current_user.is_admin():
+            return resp_notallowed_user('Users')    
+
         user = get_user_by_id(user_id)
 
         if not isinstance(user, User):
