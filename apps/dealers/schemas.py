@@ -10,7 +10,8 @@ class UserRegistrationSchema(Schema):
     password = Str(required=True, error_messages={'required': MSG_FIELD_REQUIRED})
 
 class UserSchema(Schema):
+    id = Str()
     full_name = Str(required=True, error_messages={'required': MSG_FIELD_REQUIRED})
     email = Email(required=True, error_messages={'required': MSG_FIELD_REQUIRED})
-    cpf_cnpj = Str(required=True, error_messages={'required': MSG_FIELD_REQUIRED})
+    cpf = Str(required=True, error_messages={'required': MSG_FIELD_REQUIRED})
     # status = Str()

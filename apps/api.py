@@ -2,7 +2,7 @@ from flask_restful import Api, Resource
 
 from apps.dealers.resources import SignUp
 from apps.purchase.resources import Purchase
-from apps.dealers.resources_admin import AdminUserPageList
+from apps.dealers.resources_admin import AdminUserPageList, AdminUserResource
 
 class Index(Resource):
 
@@ -17,9 +17,9 @@ api = Api()
 def configure_api(app):
 
     api.add_resource(SignUp, '/dealers')
+    api.add_resource(AdminUserPageList, '/admin/dealers/<int:page_id>')
+    api.add_resource(AdminUserResource, '/admin/dealers/<string:user_id>')
 
     api.add_resource(Purchase, '/purchase')
-
-    api.add_resource(AdminUserPageList, '/admin/dealers/<int:page_id>')
-
+    
     api.init_app(app)

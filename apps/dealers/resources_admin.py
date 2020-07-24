@@ -1,9 +1,11 @@
 from flask import request
+
 from flask_restful import Resource
 from mongoengine.errors import FieldDoesNotExist
 
 from apps.responses import resp_ok, resp_exception
-from apps.messages import MSG_RESOURCE_FETCHED_PAGINATED
+from apps.messages import MSG_RESOURCE_FETCHED_PAGINATED, MSG_RESOURCE_FETCHED
+
 from .models import User
 from .schemas import UserSchema
 
@@ -37,3 +39,25 @@ class AdminUserPageList(Resource):
             'Users', MSG_RESOURCE_FETCHED_PAGINATED.format('usuários'), data=result, 
             **extra
         )
+
+class AdminUserResource(Resource): 
+
+    def get(self, user_id):
+        result = None
+        schema = UserSchema()
+
+        try: 
+            user = User.objects.get(id=user_id)
+
+        except FieldDoesNotExist as e:
+            return resp_exception('Users', description=e.__str__())
+
+        except Exception as e: 
+            return resp_exception('Users', description=e.__str__())
+
+        result = schema.dump(user)
+
+        return resp_ok(
+            'Users', MSG_RESOURCE_FETCHED.format('Usuários'), data=result
+        )    
+
