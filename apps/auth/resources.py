@@ -3,7 +3,7 @@ import json
 from flask import request
 
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_refresh_token_required, get_jwt_identity
 from bcrypt import checkpw
 
 from apps.dealers.models import User
@@ -63,3 +63,20 @@ class AuthResource(Resource):
             
         return resp_notallowed_user('Auth')    
 
+class RefreshTokenResource(Resource): 
+
+    @jwt_refresh_token_required
+    def post(self, *args, **kwargs):
+        '''
+
+        Dando um Refresh no token caso expirado. 
+
+        http://flask-jwt-extended.readthedocs.io/en/latest/refresh_tokens.html
+        '''
+        extras = { 
+            'token': create_access_token(identity=get_jwt_identity()),
+        }
+
+        return resp_ok(
+            'Auth', MSG_TOKEN_CREATED, **extras
+        )

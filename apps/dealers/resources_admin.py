@@ -6,11 +6,14 @@ from mongoengine.errors import FieldDoesNotExist
 from apps.responses import resp_ok, resp_exception
 from apps.messages import MSG_RESOURCE_FETCHED_PAGINATED, MSG_RESOURCE_FETCHED
 
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
 from .models import User
 from .schemas import UserSchema
-from .utils import get_user_by_id
+from .utils import get_user_by_id, exists_email_in_users, get_user_by_email
 
 class AdminUserPageList(Resource):
+    @jwt_required
     def get(self, page_id=1):
         schema = UserSchema(many=True)
         page_size = 10 
@@ -46,11 +49,11 @@ class AdminUserPageList(Resource):
         )
 
 class AdminUserResource(Resource): 
-    
+    @jwt_required
     def get(self, user_id):
         result = None
         schema = UserSchema()
-
+        
         user = get_user_by_id(user_id)
 
         if not isinstance(user, User):

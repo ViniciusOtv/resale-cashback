@@ -4,7 +4,7 @@ from apps.dealers.resources import SignUp
 from apps.purchase.resources import Purchase
 from apps.dealers.resources_admin import AdminUserPageList, AdminUserResource
 
-from apps.auth.resources import AuthResource
+from apps.auth.resources import AuthResource, RefreshTokenResource
 
 class Index(Resource):
 
@@ -23,6 +23,7 @@ def configure_api(app):
     api.add_resource(AdminUserResource, '/admin/dealers/<string:user_id>')
 
     api.add_resource(AuthResource, '/auth')
+    api.add_resource(RefreshTokenResource, '/auth/refresh')
     
     api.add_resource(Purchase, '/purchase')
 
