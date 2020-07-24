@@ -8,10 +8,10 @@ MSG_PASSWORD_WRONG = 'Informe uma senha forte'
 MSG_PASSWORD_NOT_SAME = 'As senhas não coincidem'
 MSG_RESOURCE_CREATED = 'Resource created'
 MSG_DOCUMENT_NULL = 'Campo cpf não pode estar em branco, preencha-o'
+MSG_DOCUMENT_ALREAD_EXIST = 'Cpf já cadastrado'
 
 MSG_RESOURCE_FETCHED_PAGINATED = 'Lista os/as {} paginados(as).'
 MSG_RESOURCE_FETCHED = '{} retornado(a).'
-
 
 MSG_TOKEN_CREATED = 'Token criado.'
 MSG_INVALID_CREDENTIALS = 'As credenciais estão inválidas para log in.'

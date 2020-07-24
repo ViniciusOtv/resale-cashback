@@ -38,8 +38,8 @@ class Purchase(Resource):
             "document_dealer": req_data.get('document_dealer', None)
         }
 
-        # if dict_purchase_data:
-        #     return resp_data_invalid('Purchase', dict_purchase_data)
+        if errors:
+            return resp_data_invalid('Purchase', errors)
 
         try:
             dict_purchase_data["purchase_id"] = generateUUID(None)
@@ -50,8 +50,8 @@ class Purchase(Resource):
         except ValidationError as e:
             return resp_exception('Purchase', msg=MSG_INVALID_DATA, description=e)
 
-        # except Exception as e:
-        #     return resp_exception('Purchase', description=e)
+        except Exception as e:
+            return resp_exception('Purchase', description=e)
 
         schema = PurchaseSchema()
         result = schema.dump(model)

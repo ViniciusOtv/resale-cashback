@@ -28,7 +28,7 @@ def check_password_is_same(password: str, confirm_password: str):
 
     return True 
 
-def check_document(document: str):
+def check_document(document):
 
     if not document: 
         return False
@@ -71,6 +71,22 @@ def exists_email_in_users(email: str, instance=None):
         return False
 
     return True
+
+
+def exists_cpf_in_users(cpf: str):
+    """
+    Validando se existe um usuário com cpf já existente
+    """
+    user = None
+    try: 
+        user = User.objects.get(cpf=cpf)
+
+    except DoesNotExist:
+        return True
+    
+    except MultipleObjectsReturned:
+        return False  
+
 
 
 def get_user_by_email(email: str):

@@ -35,7 +35,7 @@ class DealerMixin(db.Document):
 
     email = EmailField(required=True, unique=True)
     password = StringField(required=True)
-    cpf = StringField(required=True)
+    # cpf = StringField(required=True)
     roles = EmbeddedDocumentField(Roles, default=Roles)
     created = DateTimeField(default=datetime.now)
     active = BooleanField(default=False)

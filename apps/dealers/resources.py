@@ -9,16 +9,16 @@ from mongoengine.errors import NotUniqueError, ValidationError
 from apps.responses import (
     resp_already_exists,
     resp_exception,
-    resp_data_invalid,
+    resp_data_invalid,    
     resp_ok
 )
-from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME, MSG_DOCUMENT_NULL
+from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME, MSG_DOCUMENT_NULL, MSG_DOCUMENT_ALREAD_EXIST
 from apps.messages import MSG_RESOURCE_CREATED
 
 # Local
 from .models import User
 from .schemas import UserRegistrationSchema, UserSchema
-from .utils import check_password_in_signup, check_password_is_same, check_document
+from .utils import check_password_in_signup, check_password_is_same, check_document, exists_cpf_in_users
 
 
 class SignUp(Resource):
@@ -39,6 +39,10 @@ class SignUp(Resource):
 
         if not check_document(document):
             errors = {'cpf': MSG_DOCUMENT_NULL}
+            return resp_data_invalid('Users', errors)
+
+        if not exists_cpf_in_users(document):
+            errors = {'cpf': MSG_DOCUMENT_ALREAD_EXIST}
             return resp_data_invalid('Users', errors)
 
         # verifico através de uma função a senha e a confirmação da senha
@@ -80,8 +84,8 @@ class SignUp(Resource):
         except ValidationError as e:
             return resp_exception('Users', msg=MSG_INVALID_DATA, description=e)
 
-        except Exception as e:
-            return resp_exception('Users', description=e)
+        # except Exception as e:
+        #     return resp_exception('Users', description=e)
 
         # Realizo um dump dos dados de acordo com o modelo salvo
         schema = UserSchema()
