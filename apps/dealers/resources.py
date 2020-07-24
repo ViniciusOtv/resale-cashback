@@ -55,7 +55,8 @@ class SignUp(Resource):
             "full_name": req_data.get('full_name', None),
             "email": req_data.get('email', None),
             "password": req_data.get('password', None),
-            "cpf": req_data.get('cpf', None)
+            "cpf": req_data.get('cpf', None), 
+            "active": req_data.get('active', None)
         }
 
         data = json.dumps(dict_data)

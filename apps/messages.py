@@ -11,3 +11,9 @@ MSG_DOCUMENT_NULL = 'Campo cpf não pode estar em branco, preencha-o'
 
 MSG_RESOURCE_FETCHED_PAGINATED = 'Lista os/as {} paginados(as).'
 MSG_RESOURCE_FETCHED = '{} retornado(a).'
+
+
+MSG_TOKEN_CREATED = 'Token criado.'
+MSG_INVALID_CREDENTIALS = 'As credenciais estão inválidas para log in.'
+MSG_TOKEN_EXPIRED = 'Token expirou.'
+MSG_PERMISSION_DENIED = 'Permissão negada.'

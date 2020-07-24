@@ -8,6 +8,7 @@ from apps.messages import MSG_RESOURCE_FETCHED_PAGINATED, MSG_RESOURCE_FETCHED
 
 from .models import User
 from .schemas import UserSchema
+from .utils import get_user_by_id
 
 class AdminUserPageList(Resource):
     def get(self, page_id=1):
@@ -23,8 +24,12 @@ class AdminUserPageList(Resource):
         try: 
             users = User.objects().paginate(page_id, page_size)
 
+        except FieldDoesNotExist as e:
+            return resp_exception('Users', description=e.__str__())
+
         except FieldDoesNotExist as e: 
             return resp_exception('Users', description=e.__str__())
+
         except Exception as e: 
             return resp_exception('Users', description=e.__str__())
 
@@ -41,21 +46,17 @@ class AdminUserPageList(Resource):
         )
 
 class AdminUserResource(Resource): 
-
+    
     def get(self, user_id):
         result = None
         schema = UserSchema()
 
-        try: 
-            user = User.objects.get(id=user_id)
+        user = get_user_by_id(user_id)
 
-        except FieldDoesNotExist as e:
-            return resp_exception('Users', description=e.__str__())
+        if not isinstance(user, User):
+            return user
 
-        except Exception as e: 
-            return resp_exception('Users', description=e.__str__())
-
-        result = schema.dump(user)
+        result = schema.dump(user)    
 
         return resp_ok(
             'Users', MSG_RESOURCE_FETCHED.format('Usuários'), data=result

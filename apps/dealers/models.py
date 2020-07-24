@@ -38,7 +38,7 @@ class DealerMixin(db.Document):
     cpf = StringField(required=True)
     roles = EmbeddedDocumentField(Roles, default=Roles)
     created = DateTimeField(default=datetime.now)
-    # status = StringField(default=False)
+    active = BooleanField(default=False)
 
     def is_active(self):
         return self.active

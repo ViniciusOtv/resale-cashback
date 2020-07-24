@@ -52,7 +52,7 @@ def get_user_by_id(user_id: str):
 
 def exists_email_in_users(email: str, instance=None):
     """
-    Verifico se existe um usuário com aquele email
+    Validando se existe um usuário com email já existente
     """
     user = None
 
