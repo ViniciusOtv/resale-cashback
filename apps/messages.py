@@ -9,6 +9,8 @@ MSG_PASSWORD_NOT_SAME = 'As senhas não coincidem'
 MSG_RESOURCE_CREATED = 'Resource created'
 MSG_DOCUMENT_NULL = 'Campo cpf não pode estar em branco, preencha-o'
 MSG_DOCUMENT_ALREAD_EXIST = 'Cpf já cadastrado'
+MSG_EMAIL_NULL = 'Campo e-mail não pode ser nulo, preencha-o'
+MSG_EMAIL_ALREAD_EXIST = 'Email já cadastrado'
 
 MSG_RESOURCE_FETCHED_PAGINATED = 'Lista os/as {} paginados(as).'
 MSG_RESOURCE_FETCHED = '{} retornado(a).'

@@ -9,16 +9,16 @@ from mongoengine.errors import NotUniqueError, ValidationError
 from apps.responses import (
     resp_already_exists,
     resp_exception,
-    resp_data_invalid,    
+    resp_data_invalid,
     resp_ok
 )
-from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME, MSG_DOCUMENT_NULL, MSG_DOCUMENT_ALREAD_EXIST
+from apps.messages import MSG_NO_DATA, MSG_PASSWORD_WRONG, MSG_INVALID_DATA, MSG_PASSWORD_NOT_SAME, MSG_DOCUMENT_NULL, MSG_DOCUMENT_ALREAD_EXIST, MSG_EMAIL_NULL, MSG_EMAIL_ALREAD_EXIST
 from apps.messages import MSG_RESOURCE_CREATED
 
 # Local
 from .models import User
 from .schemas import UserRegistrationSchema, UserSchema
-from .utils import check_password_in_signup, check_password_is_same, check_document, exists_cpf_in_users
+from .utils import check_password_in_signup, check_password_is_same, check_document, exists_cpf_in_users, exists_email_in_users
 
 
 class SignUp(Resource):
@@ -45,6 +45,10 @@ class SignUp(Resource):
             errors = {'cpf': MSG_DOCUMENT_ALREAD_EXIST}
             return resp_data_invalid('Users', errors)
 
+        if not exists_email_in_users(document):
+            errors = {'email': MSG_EMAIL_ALREAD_EXIST}
+            return resp_data_invalid('Users', errors)
+
         # verifico através de uma função a senha e a confirmação da senha
         # Se as senhas não são iguais retorno uma respota inválida
         if not check_password_in_signup(password, confirm_password):
@@ -59,7 +63,7 @@ class SignUp(Resource):
             "full_name": req_data.get('full_name', None),
             "email": req_data.get('email', None),
             "password": req_data.get('password', None),
-            "cpf": req_data.get('cpf', None), 
+            "cpf": req_data.get('cpf', None),
             "active": req_data.get('active', None)
         }
 
@@ -84,8 +88,8 @@ class SignUp(Resource):
         except ValidationError as e:
             return resp_exception('Users', msg=MSG_INVALID_DATA, description=e)
 
-        # except Exception as e:
-        #     return resp_exception('Users', description=e)
+        except Exception as e:
+            return resp_exception('Users', description=e)
 
         # Realizo um dump dos dados de acordo com o modelo salvo
         schema = UserSchema()

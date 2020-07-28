@@ -87,8 +87,6 @@ def exists_cpf_in_users(cpf: str):
     except MultipleObjectsReturned:
         return False  
 
-
-
 def get_user_by_email(email: str):
     try:
         # buscamos todos os usuários da base utilizando o paginate
@@ -102,3 +100,17 @@ def get_user_by_email(email: str):
 
     except Exception as e:
         return resp_exception('Users', description=e.__str__())
+
+def get_user_by_document(cpf: str): 
+    try: 
+        return User.objects.get(cpf=cpf)
+
+    except DoesNotExist: 
+        return resp_does_not_exist('Users', 'Usuário')
+
+    except FieldDoesNotExist as e:
+        return resp_exception('Users', description=e.__str__())
+
+    except Exception as e:
+        return resp_exception('Users', description=e.__str__())    
+      

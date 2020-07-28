@@ -1,10 +1,13 @@
 from flask_restful import Api, Resource
 
 from apps.dealers.resources import SignUp
-from apps.purchase.resources import Purchase
 from apps.dealers.resources_admin import AdminUserPageList, AdminUserResource
 
 from apps.auth.resources import AuthResource, RefreshTokenResource
+
+from apps.order.resources import order
+from apps.order.resource_admin import AdminUserOrderList, AdminOrderResource, AdminOrderDeleteResource
+
 
 class Index(Resource):
 
@@ -25,8 +28,10 @@ def configure_api(app):
     api.add_resource(AuthResource, '/auth')
     api.add_resource(RefreshTokenResource, '/auth/refresh')
     
-    api.add_resource(Purchase, '/purchase')
+    api.add_resource(order, '/order')
+    api.add_resource(AdminUserOrderList, '/admin/order/<int:page_id>')
+    api.add_resource(AdminOrderResource, '/admin/order/<string:order_id>')
+    api.add_resource(AdminOrderDeleteResource, '/admin/delete-order/<float:order_values>')
 
 
-    
     api.init_app(app)
