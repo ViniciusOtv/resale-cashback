@@ -13,7 +13,6 @@ from .models import OrderModel
 
 _ENV_FILE = join(dirname(__file__), '.env')
 
-
 if isfile(_ENV_FILE):
     load_dotenv(dotenv_path=_ENV_FILE)
 

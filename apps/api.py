@@ -8,6 +8,8 @@ from apps.auth.resources import AuthResource, RefreshTokenResource
 from apps.order.resources import order
 from apps.order.resource_admin import AdminUserOrderList, AdminOrderResource, AdminOrderDeleteResource
 
+from apps.cashback_accumulation.resources import Accumulation
+
 
 class Index(Resource):
 
@@ -32,6 +34,8 @@ def configure_api(app):
     api.add_resource(AdminUserOrderList, '/admin/order/<int:page_id>')
     api.add_resource(AdminOrderResource, '/admin/order/<string:order_id>')
     api.add_resource(AdminOrderDeleteResource, '/admin/delete-order/<float:order_values>')
+
+    api.add_resource(Accumulation, '/admin/accumulation-cashback/<string:document>')
 
 
     api.init_app(app)
