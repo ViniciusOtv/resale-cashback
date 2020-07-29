@@ -1,11 +1,11 @@
 # Rasale-Cashback
-    Microserviço responsável por cadastrar revendedores e compras, e acompanhar o cashback de cada compra cadastrada.
+Microserviço responsável por cadastrar revendedores e compras, e acompanhar o cashback de cada compra cadastrada.
 
 # Utilização
-    Para rodar o projeto no ambiente local, basta rodar o arquivo application.py. 
+Para rodar o projeto no ambiente local, basta rodar o arquivo application.py. 
 
 # Tecnologias envolvidas
-    Utilizamos MongoDb como banco de dados não relacional, a partir de uma imagem do docker que está configurada no arquivo .env. 
+Utilizamos MongoDb como banco de dados não relacional, a partir de uma imagem do docker que está configurada no arquivo .env. 
 Para testes unitários usamos o Pytest. Foi utilizado também o pacote flask-mongoengine, que extende as funcionalidades do mongoengine 
 manipulando e gerenciando conexôes. 
 
@@ -29,7 +29,7 @@ Request
 
 ```
 
-O campo "active" determina se o usuário terá permissóes de administrador. Uuários com o papel de administrador conseguem realizar consultas de outros usuários 
+O campo "active" determina se o usuário terá permissões de administrador. Usuários com o papel de administrador conseguem realizar consultas de outros usuários 
 e outras compras. 
 
 Exemplo: 
@@ -60,7 +60,7 @@ Response
   "status": 200
 }
 ```
-A resposta deve conter um Guid (id) gerado para consulta na base de dados do MOngoDb. 
+A resposta deve conter um Guid (id) gerado para consulta na base de dados do MongoDb. 
 Caso seja informado um cpf ou um email já existente exibiremos o seguinte response. 
 
 ```json
@@ -106,7 +106,7 @@ Response
    "resource": "Users"
 }
 ```
-E caso de algum Exception o erro é tratado internamente pela api, retornando na maioria das vees uma mensagem 
+E caso de algum Exception o erro é tratado internamente pela api, retornando na maioria das vezes uma mensagem 
 amigável para o usuário
 
 `Post /auth` EndPoint responsável por autenticar o usuário na api, só serão autenticados os usuário que tiverem o campo 
@@ -219,12 +219,12 @@ Response
 }
 ```
 
-Caso o usuário não exista 
+Caso a compra não exista 
 ```json
 Response
 {
-  "message": "Este(a) Usuário não existe.",
-  "resource": "Users"
+  "message": "Este Pedido não existe.",
+  "resource": "Order"
 }
 ```
 
