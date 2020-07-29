@@ -48,7 +48,7 @@ class AdminUserOrderList(Resource):
         result = schema.dump(order.items)
 
         return resp_ok(
-            'order', MSG_RESOURCE_FETCHED_PAGINATED.format('compras'), data=result,
+            'Order', MSG_RESOURCE_FETCHED_PAGINATED.format('compras'), data=result,
             **extra
         )
 
@@ -61,29 +61,30 @@ class AdminOrderResource(Resource):
 
         order = get_order_by_id(order_id)
 
+
         if not isinstance(order, OrderModel):
             return order
 
         result = schema.dump(order)
 
         return resp_ok(
-            'order', MSG_RESOURCE_FETCHED.format('Compra'), data=result
+            'Order', MSG_RESOURCE_FETCHED.format('Compra'), data=result
         )
 
 
-class AdminOrderDeleteResource(Resource):
-    @jwt_required
-    def get(self, order_values):
-        result = None
-        schema = OrderSchema(many=True)
+# class AdminOrderDeleteResource(Resource):
+#     @jwt_required
+#     def get(self, order_values):
+#         result = None
+#         schema = OrderSchema(many=True)
 
-        order = OrderModel.objects.get().delete()
+#         order = OrderModel.objects.get().delete()
 
-        if not isinstance(order, OrderModel):
-            return order
+#         if not isinstance(order, OrderModel):
+#             return order
 
-        result = schema.dump(order.items)
+#         result = schema.dump(order.items)
 
-        return resp_ok(
-            'order', MSG_RESOURCE_FETCHED_PAGINATED.format('compras'), data=result
-        )
+#         return resp_ok(
+#             'order', MSG_RESOURCE_FETCHED_PAGINATED.format('compras'), data=result
+#         )

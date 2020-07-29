@@ -34,7 +34,7 @@ def cashback_percentage(order_value):
         return percentage
 
     else:
-        percentage = 0.15
+        percentage = 0.20
         return percentage
 
 

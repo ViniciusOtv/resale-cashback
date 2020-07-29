@@ -60,18 +60,15 @@ def exists_email_in_users(email: str, instance=None):
         user = User.objects.get(email=email)
 
     except DoesNotExist:
-        return False
+        return True
 
     except MultipleObjectsReturned:
-        return True
+        return False
 
     # verifico se o id retornado na pesquisa é mesmo da minha instancia
     # informado no parâmetro
     if instance and instance.id == user.id:
         return False
-
-    return True
-
 
 def exists_cpf_in_users(cpf: str):
     """
