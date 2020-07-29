@@ -1,6 +1,15 @@
 # Rasale-Cashback
     Microserviço responsável por cadastrar revendedores e compras, e acompanhar o cashback de cada compra cadastrada.
 
+# Utilização
+    Para rodar o projeto no ambiente local, basta rodar o arquivo application.py. 
+
+# Tecnologias envolvidas
+    Utilizamos MongoDb como banco de dados não relacional, a partir de uma imagem do docker que está configurada no arquivo .env. 
+Para testes unitários usamos o Pytest. Foi utilizado também o pacote flask-mongoengine, que extende as funcionalidades do mongoengine 
+manipulando e gerenciando conexôes. 
+
+
 # Endpoints 
 `POST /dealers` Reponsável por cadastrar um novo revendedor(a), onde os requisitos mínimos para cadastro são: nome completo, 
 Cpf, e-mail e senha. 
@@ -10,12 +19,12 @@ Corpo da requisição
 ```json
 Request
 {
-    "confirm_password": string,
-    "email": string,
-    "cpf": string,
-    "full_name": string,
-    "password": string,
-    "active": bool
+    "confirm_password": "string",
+    "email": "string",
+    "cpf": "string",
+    "full_name": "string",
+    "password": "string",
+    "active": "bool"
 }
 
 ```
@@ -132,6 +141,27 @@ Response
   "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTU5ODcyOTUsIm5iZiI6MTU5NTk4NzI5NSwianRpIjoiNzYwN2U4M2MtYjFkYS00ZGNmLTg1MzctYWQxZGU2ZmY1MjU3IiwiZXhwIjoxNTk1OTg4NDk1LCJpZGVudGl0eSI6InZpbmNpdXMub3R2QGdtYWlsLmNvbSIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyIsInVzZXJfY2xhaW1zIjp7ImFjdGl2ZSI6dHJ1ZX19.r_XCS340qrjnM1GGwUQTHWZnss1ctXbmd-6QFKlsDio"
 }
 ``` 
+Caso o Token expire 
+
+```json 
+Response
+{ 
+  "message": "Token expirou.",
+  "status": 401,
+  "sub_status": 42
+}
+```
+
+Caso as credenciais estejam inválidas
+```json 
+Response
+{ 
+  "description": "Only access tokens are allowed",
+  "message": "As credenciais estão inválidas para log in.",
+  "status": 401,
+  "sub_status": 3
+}
+```
 
 `Post '/auth/refresh'` Todo token dura até 20 minutos, esse endpoint é responsável por dar um refresh no token caso o mesmo expire
 
@@ -164,3 +194,49 @@ Response
   "resource": "order",
   "status": 200
 }
+``` 
+`Get /admin/order/<int:page_id>`  Responsável por consultar os pedidos, por paginação, para consulta desse endpoint o usuário precisará de um perfil de administrador
+
+`Get /admin/order/<string:order_id>` Responsável por consultar os pedidos por id. Para realizar a 
+consulta basta apenas passar o id por parâmetro na Url, e adicionar o Authorization no Header como monstrado no 
+exemplo acima. 
+
+Exemplo de Retoro 
+
+```json 
+Response
+{
+  "data": {
+    "active": true,
+    "cpf": "3132132165",
+    "email": "vincius.otv@gmail.com",
+    "full_name": "Vinicius Otavio",
+    "id": "5f1a3d9970fd35b1e708d30f"
+  },
+  "message": "Usuários retornado(a).",
+  "resource": "Users",
+  "status": 200
+}
+```
+
+Caso o usuário não exista 
+```json
+Response
+{
+  "message": "Este(a) Usuário não existe.",
+  "resource": "Users"
+}
+```
+
+`Get /admin/accumulation-cashback/<string:document>` Responsável por consultar um Api externa, onde temos por resultado o acúmulo de cashback de determinado revendedor. 
+Para realizar a consulta basta passar o número do documento por parâmetro na Url. 
+
+```json 
+Response
+{ 
+      "statusCode": 200,
+    "body": {
+        "credit": 3381
+    }
+}
+```
